@@ -1,0 +1,66 @@
+class Item:
+    """
+    Representasi barang untuk masalah knapsack.
+
+    Attributes:
+        weight (int): Berat barang.
+        value (int): Nilai barang.
+    """
+
+    def __init__(self, weight, value):
+        self.weight = weight
+        self.value = value
+
+    def __str__(self):
+        return f"Item(weight={self.weight}, value={self.value})"
+
+
+def knapsack_dynamic(items, capacity):
+    """
+    Menentukan kombinasi barang yang memberikan nilai maksimal untuk tas petualangan menggunakan dynamic programming.
+
+    Args:
+        items (list): Daftar barang-barang yang dapat dibawa.
+        capacity (int): Kapasitas tas petualangan.
+
+    Returns:
+        list: List barang-barang yang dipilih.
+    """
+
+    n = len(items)
+    dp = [[0] * (capacity + 1) for _ in range(n + 1)]
+
+    for i in range(1, n + 1):
+        for w in range(capacity + 1):
+            current_item = items[i - 1]
+
+            if current_item.weight <= w:
+                dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - current_item.weight] + current_item.value)
+            else:
+                dp[i][w] = dp[i - 1][w]
+
+    selected_items = []
+    w, v = capacity, dp[n][capacity]
+
+    for i in range(n, 0, -1):
+        if dp[i][w] != dp[i - 1][w]:
+            selected_items.append(items[i - 1])
+            w -= items[i - 1].weight
+
+    return selected_items
+
+
+# Data
+items = [
+    Item(5, 12),
+    Item(3, 8),
+    Item(1, 4),
+    Item(6, 20),
+    Item(2, 6),
+]
+
+capacity = 10
+
+best_items_dynamic = knapsack_dynamic(items, capacity)
+
+print([item.weight for item in best_items_dynamic])
