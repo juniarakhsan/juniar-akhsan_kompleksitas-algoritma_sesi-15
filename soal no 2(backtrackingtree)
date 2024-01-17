@@ -1,0 +1,61 @@
+"""
+Akar
+├── Pedang Ajaib (5 kg, 12)
+│   ├── Potion Kekekalan (3 kg, 8)
+│   │   ├── Kompas Magis (1 kg, 4)
+│   │   │   └── Tongkat Cahaya (2 kg, 6)
+│   │   └── Tongkat Cahaya (2 kg, 6)
+│   └── Kompas Magis (1 kg, 4)
+└── Mantel Kehancuran (6 kg, 20)
+
+Urutan Barang :
+
+Mantel Kehancuran (20/6 = 3.33)
+Pedang Ajaib (12/5 = 2.4)
+Tongkat Cahaya (6/2 = 3.0)
+Potion Kekekalan (8/3 = 2.67)
+Kompas Magis (4/1 = 4.0)
+Proses:
+
+Pilih barang dengan nilai per unit berat tertinggi hingga kapasitas tas terpenuhi.
+Hasil:
+
+Barang yang dipilih: Mantel Kehancuran, Pedang Ajaib.
+Total nilai: 
+20+12=32
+"""
+
+class TreeNode:
+    def __init__(self, name, weight, value):
+        self.name = name
+        self.weight = weight
+        self.value = value
+        self.children = []
+
+    def add_child(self, child):
+        self.children.append(child)
+
+    def __str__(self, level=0):
+        result = "\t" * level + f"{self.name} ({self.weight} kg, {self.value})\n"
+        for child in self.children:
+            result += child.__str__(level + 1)
+        return result
+
+root = TreeNode("Akar", 0, 0)
+
+pedang_ajaib = TreeNode("Pedang Ajaib", 5, 12)
+potion_kekekalan = TreeNode("Potion Kekekalan", 3, 8)
+kompas_magis = TreeNode("Kompas Magis", 1, 4)
+tongkat_cahaya = TreeNode("Tongkat Cahaya", 2, 6)
+
+potion_kekekalan.add_child(kompas_magis)
+potion_kekekalan.add_child(tongkat_cahaya)
+pedang_ajaib.add_child(potion_kekekalan)
+pedang_ajaib.add_child(kompas_magis)
+
+mantel_kehancuran = TreeNode("Mantel Kehancuran", 6, 20)
+
+root.add_child(pedang_ajaib)
+root.add_child(mantel_kehancuran)
+
+print(root)
